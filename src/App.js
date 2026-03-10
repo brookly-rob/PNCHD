@@ -189,7 +189,7 @@ const App = () => {
             </div>
           </>
         ) : (
-          <h1 className="text-xl font-black uppercase tracking-tighter">
+          <h1 className="text-xl font-black uppercase tracking-tighter pl-2">
             Punch List Pro
           </h1>
         )}
@@ -197,9 +197,9 @@ const App = () => {
 
       {/* MENU VIEW */}
       {view === "menu" && (
-        <div className="p-4 space-y-3">
+        <div className="p-4 flex flex-col space-y-3">
           {projects.map((p) => (
-            <div key={p.id} className="relative group">
+            <div key={p.id} className="relative group w-full">
               <button
                 onClick={() => {
                   setCurrentProject(p);
@@ -228,18 +228,36 @@ const App = () => {
 
       {/* PROJECT VIEW */}
       {view === "project" && (
-        <div className="p-2">
+        <div style={{ padding: "16px", width: "100%" }}>
           {/* SEARCH & FILTER BAR */}
-          <div className="bg-white p-3 rounded-xl shadow-sm mb-4 space-y-2">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              marginBottom: "20px",
+            }}
+          >
             <input
               type="text"
               placeholder="Search items..."
-              className="w-full p-2 border rounded bg-gray-50 text-sm"
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+              }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <select
-              className="w-full p-2 border rounded bg-gray-50 text-sm font-bold"
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                fontWeight: "bold",
+              }}
               value={tradeFilter}
               onChange={(e) => setTradeFilter(e.target.value)}
             >
@@ -252,32 +270,51 @@ const App = () => {
             </select>
           </div>
 
-          {/* TASK LIST */}
-          <div className="space-y-2">
+          {/* TASK LIST - EACH WRAPPED IN A DIV TO FORCE A NEW LINE */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+          >
             {filteredTasks.map((task) => (
-              <button
-                key={task.id}
-                onClick={() => setShowActionModal(task)}
-                className={`w-full text-left p-4 rounded-xl border-b-4 shadow-sm flex items-center justify-between transition-all active:scale-95 ${
-                  tradeColors[task.trade]
-                } ${
-                  task.status === "completed"
-                    ? "opacity-50 border-gray-200"
-                    : ""
-                }`}
-              >
-                <div className="flex flex-col">
-                  <span className="font-black text-lg leading-tight flex items-center gap-2">
-                    {task.status === "completed" && "✅"}
-                    {task.status === "attention" && "‼️"}
-                    {task.text}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase opacity-60">
-                    {task.trade} {task.image ? "• 📸" : ""}{" "}
-                    {task.note ? "• 📝" : ""}
-                  </span>
-                </div>
-              </button>
+              <div key={task.id} style={{ width: "100%" }}>
+                <button
+                  onClick={() => setShowActionModal(task)}
+                  className={tradeColors[task.trade]}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    textAlign: "left",
+                    // --- ADJUSTED VALUES BELOW ---
+                    padding: "12px 16px", // Reduced top/bottom padding to 12px
+                    borderRadius: "10px", // Slightly tighter corners
+                    borderBottom: "3px solid rgba(0,0,0,0.1)", // Thinner shadow line
+                    // ----------------------------
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+                    transition: "transform 0.1s",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontWeight: "800", // Slightly less heavy
+                        fontSize: "15px", // Shrinking text from 18px to 15px
+                      }}
+                    >
+                      {task.status === "completed" && "✅ "}
+                      {task.status === "attention" && "‼️ "}
+                      {task.text}
+                    </span>
+                    <div style={{ opacity: 0.6, fontSize: "14px" }}>
+                      {task.note && "📝"} {task.image && "📸"}
+                    </div>
+                  </div>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -290,32 +327,32 @@ const App = () => {
           onClick={() => setShowActionModal(null)}
         >
           <div
-            className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-start mb-4 border-b pb-2">
+            <div className="flex justify-between items-start mb-4 border-b pb-2 shrink-0">
               <h3 className="text-xl font-black uppercase text-blue-900">
                 {showActionModal.text}
               </h3>
               <button
                 onClick={() => deleteTask(showActionModal.id)}
-                className="text-xl"
+                className="text-xl opacity-20"
               >
                 🗑️
               </button>
             </div>
 
-            <div className="space-y-4 mb-6">
-              <div className="bg-gray-100 p-3 rounded-lg">
+            <div className="space-y-4 mb-6 overflow-y-auto pr-1">
+              <div className="bg-gray-100 p-2 px-3 rounded-lg inline-block">
                 <p className="text-[10px] font-black uppercase text-gray-500">
                   Assignee
                 </p>
-                <p className="font-bold">{showActionModal.trade}</p>
+                <p className="font-bold text-sm">{showActionModal.trade}</p>
               </div>
 
               {showActionModal.note && (
                 <div className="bg-blue-50 p-3 border-l-4 border-blue-500 rounded-r-lg">
-                  <p className="text-[10px] font-black uppercase text-blue-700">
+                  <p className="text-[10px] font-black uppercase text-blue-700 mb-1">
                     Instructions
                   </p>
                   <p className="text-sm italic">"{showActionModal.note}"</p>
@@ -325,8 +362,8 @@ const App = () => {
               {showActionModal.status === "attention" &&
                 showActionModal.attentionNote && (
                   <div className="bg-red-50 p-3 border-l-4 border-red-500 rounded-r-lg">
-                    <p className="text-[10px] font-black uppercase text-red-700">
-                      🚨 Current Issue
+                    <p className="text-[10px] font-black uppercase text-red-700 mb-1">
+                      🚨 Roadblock
                     </p>
                     <p className="text-sm font-bold">
                       "{showActionModal.attentionNote}"
@@ -335,18 +372,24 @@ const App = () => {
                 )}
 
               {showActionModal.image && (
-                <img
-                  src={showActionModal.image}
-                  alt="Task"
-                  className="w-full rounded-lg border shadow-inner max-h-64 object-contain bg-black"
-                />
+                <div className="bg-black rounded-xl overflow-hidden flex justify-center border-2 border-gray-100">
+                  <img
+                    src={showActionModal.image}
+                    alt="Task"
+                    style={{
+                      maxHeight: "180px",
+                      width: "auto",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
               )}
             </div>
 
-            <div className="grid gap-2">
+            <div className="grid gap-2 mt-auto pt-4 border-t shrink-0">
               <button
                 onClick={() => updateStatus(showActionModal.id, "completed")}
-                className="w-full bg-green-600 text-white font-black py-4 rounded-xl uppercase"
+                className="w-full bg-green-600 text-white font-black py-4 rounded-xl uppercase shadow-md"
               >
                 ✅ Mark Done
               </button>
@@ -355,13 +398,13 @@ const App = () => {
                   const n = prompt("What's stopping this?");
                   if (n) updateStatus(showActionModal.id, "attention", n);
                 }}
-                className="w-full bg-red-600 text-white font-black py-4 rounded-xl uppercase"
+                className="w-full bg-red-600 text-white font-black py-4 rounded-xl uppercase shadow-md"
               >
                 ‼️ Needs Attention
               </button>
               <button
                 onClick={() => setShowActionModal(null)}
-                className="w-full py-2 font-bold text-gray-400 uppercase"
+                className="w-full py-2 font-bold text-gray-400 uppercase text-xs"
               >
                 Close
               </button>
@@ -373,25 +416,23 @@ const App = () => {
       {/* MODAL: ADD TASK */}
       {showTaskModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h3 className="font-black text-xl mb-6 uppercase text-blue-900">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl overflow-y-auto max-h-[95vh]">
+            <h3 className="font-black text-xl mb-6 uppercase text-blue-900 text-center">
               New Punch Item
             </h3>
 
             <div className="space-y-4">
-              {/* 1. TASK */}
               <div>
                 <label className="text-[10px] font-black text-gray-400 uppercase">
                   Task Name
                 </label>
                 <input
                   id="taskText"
-                  className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold mt-1"
-                  placeholder="e.g. Paint Touch-up"
+                  className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold mt-1 shadow-inner bg-gray-50"
+                  placeholder="What needs doing?"
                 />
               </div>
 
-              {/* 2. ASSIGN TRADE */}
               <div>
                 <label className="text-[10px] font-black text-gray-400 uppercase">
                   Assign Trade
@@ -399,7 +440,7 @@ const App = () => {
                 <select
                   value={selectedTrade}
                   onChange={(e) => setSelectedTrade(e.target.value)}
-                  className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold bg-gray-50 mt-1"
+                  className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold bg-white mt-1 shadow-sm"
                 >
                   {trades.map((t) => (
                     <option key={t} value={t}>
@@ -409,7 +450,6 @@ const App = () => {
                 </select>
               </div>
 
-              {/* 3. ADD NOTE TOGGLE */}
               <button
                 onClick={() => setShowNoteInput(!showNoteInput)}
                 className={`w-full py-3 rounded-xl border-2 font-black text-xs uppercase ${
@@ -445,40 +485,48 @@ const App = () => {
                     ? "📸 Photo Attached"
                     : "📷 Add Photo / Take Picture"}
                 </button>
+
+                {/* This input stays functional but is now completely invisible */}
                 <input
                   type="file"
                   id="camIn"
                   accept="image/*"
-                  className="hidden"
+                  style={{ display: "none" }}
                   onChange={(e) => {
                     if (e.target.files[0])
                       setSelectedImage(URL.createObjectURL(e.target.files[0]));
                   }}
                 />
+
                 {selectedImage && (
-                  <img
-                    src={selectedImage}
-                    alt="preview"
-                    className="h-32 w-full object-contain rounded border bg-gray-50"
-                  />
+                  <div className="bg-black rounded-xl overflow-hidden flex justify-center border shadow-inner">
+                    <img
+                      src={selectedImage}
+                      alt="preview"
+                      style={{
+                        height: "120px",
+                        width: "auto",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </div>
                 )}
               </div>
 
-              {/* 5. FOOTER BUTTONS */}
-              <div className="flex flex-col gap-2 pt-4 border-t">
+              <div className="flex flex-col gap-2 pt-4 border-t mt-4">
                 <button
                   onClick={() => {
                     const val = document.getElementById("taskText").value;
                     if (val)
                       addTask(val, selectedImage, taskNote, selectedTrade);
                   }}
-                  className="w-full bg-blue-600 text-white py-4 rounded-xl font-black shadow-lg uppercase"
+                  className="w-full bg-blue-600 text-white py-4 rounded-xl font-black shadow-lg uppercase active:scale-95 transition-transform"
                 >
                   Add to List
                 </button>
                 <button
                   onClick={resetTaskForm}
-                  className="w-full py-2 font-bold text-gray-400 uppercase"
+                  className="w-full py-2 font-bold text-gray-400 uppercase text-xs"
                 >
                   Cancel
                 </button>
@@ -491,12 +539,14 @@ const App = () => {
       {/* MODAL: ADD PROJECT */}
       {showProjModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h3 className="font-black text-lg mb-4 uppercase">Project Name</h3>
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
+            <h3 className="font-black text-lg mb-4 uppercase text-blue-900">
+              Project Name
+            </h3>
             <input
               id="pName"
               type="text"
-              className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold mb-4"
+              className="w-full p-4 border-2 border-gray-200 rounded-xl font-bold mb-6 bg-gray-50"
               placeholder="e.g. 123 Maple Ave"
             />
             <div className="flex flex-col gap-2">
@@ -504,13 +554,13 @@ const App = () => {
                 onClick={() =>
                   addProject(document.getElementById("pName").value)
                 }
-                className="w-full bg-blue-600 text-white py-4 rounded-xl font-black uppercase"
+                className="w-full bg-blue-600 text-white py-4 rounded-xl font-black uppercase shadow-lg"
               >
                 Create Project
               </button>
               <button
                 onClick={() => setShowProjModal(false)}
-                className="w-full py-2 font-bold text-gray-400 uppercase"
+                className="w-full py-2 font-bold text-gray-400 uppercase text-xs"
               >
                 Cancel
               </button>
