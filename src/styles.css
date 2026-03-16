@@ -1,4 +1,46 @@
-.App {
-  font-family: sans-serif;
-  text-align: center;
+:root {
+  /* Colors from your Journal App */
+  --bg-deep: #0a0a1a;
+  --bg-accent: #1c0a33;
+  --glow-cyan: rgba(0, 255, 255, 0.4);
+  --glow-purple: rgba(138, 43, 226, 0.5);
+  --text-bright: #e6f7ff;
+  --brand-gold: #ffda80;
+  --modal-bg: rgba(5, 0, 15, 0.95);
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(
+    circle at top left,
+    var(--bg-deep) 0%,
+    var(--bg-accent) 100%
+  ) !important;
+  color: var(--text-bright);
+  font-family: "Inter", sans-serif; /* Or 'Orbital' if you've imported it */
+  min-height: 100vh;
+}
+
+/* The "Rich" Modal look from your inspiration files */
+.rich-modal {
+  background: var(--modal-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--glow-cyan) !important;
+  backdrop-filter: blur(12px);
+  color: var(--text-bright);
+}
+
+/* The Choice-Button style from your inspiration app */
+.punch-button-rich {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+}
+
+.punch-button-rich:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.1);
 }
